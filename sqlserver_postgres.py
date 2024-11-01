@@ -1,6 +1,23 @@
 import psycopg2
 import pytds
 
+def get_sqlserver_connection(server, database, user, password):
+    return pytds.connect(
+        dsn=server,
+        database=database,
+        user=user,
+        password=password,
+    )
+
+def get_postgres_connection(host, port, database, user, password):
+    return psycopg2.connect(
+        dbname=database,
+        user=user,
+        password=password,
+        host=host,
+        port=port
+    )
+
 def get_table_structure(sqlserver_conn, table_name):
     sqlserver_cursor = sqlserver_conn.cursor()
 
@@ -119,12 +136,12 @@ def main():
             sqlserver_password = input("Enter the SQL Server password: ")
             sqlserver_host = input("Enter the SQL Server host: ")
 
-        postgres_conn = psycopg2.connect(
-            dbname='',
-            user=postgres_user,
-            password=postgres_password,
-            host=postgres_host,
-            port=postgres_port
+        postgres_conn = get_postgres_connection(
+            postgres_host, 
+            postgres_port, 
+            postgres_dbname, 
+            postgres_user, 
+            postgres_password
         )
 
         if not database_exists_in_postgres(postgres_conn, postgres_dbname):
@@ -133,11 +150,11 @@ def main():
             postgres_conn.close()
             continue
 
-        sqlserver_conn = pytds.connect(
-            dsn=sqlserver_host,
-            database=sqlserver_dbname,
-            user=sqlserver_user,
-            password=sqlserver_password,
+        sqlserver_conn = get_sqlserver_connection(
+            sqlserver_host, 
+            sqlserver_dbname, 
+            sqlserver_user, 
+            sqlserver_password
         )
 
         if not database_exists_in_sqlserver(sqlserver_conn, sqlserver_dbname):
@@ -148,20 +165,20 @@ def main():
 
         # Reconnect to the specific databases
         postgres_conn.close()
-        postgres_conn = psycopg2.connect(
-            dbname=postgres_dbname,
-            user=postgres_user,
-            password=postgres_password,
-            host=postgres_host,
-            port=postgres_port
+        postgres_conn = get_postgres_connection(
+            postgres_host, 
+            postgres_port, 
+            postgres_dbname, 
+            postgres_user, 
+            postgres_password
         )
 
         sqlserver_conn.close()
-        sqlserver_conn = pytds.connect(
-            dsn=sqlserver_host,
-            database=sqlserver_dbname,
-            user=sqlserver_user,
-            password=sqlserver_password,
+        sqlserver_conn = get_sqlserver_connection(
+            sqlserver_host, 
+            sqlserver_dbname, 
+            sqlserver_user, 
+            sqlserver_password
         )
 
         tables = list_tables_in_sqlserver(sqlserver_conn)
