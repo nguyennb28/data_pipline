@@ -41,7 +41,7 @@ def list_tables_in_sqlserver(sqlserver_conn):
     sqlserver_cursor.execute("SELECT table_name FROM information_schema.tables")
     tables = sqlserver_cursor.fetchall()
     sqlserver_cursor.close()
-    return [table[0] for table in tables]
+    return [table[0].lower() for table in tables]
 
 def create_table_in_postgres(postgres_conn, table_name, columns):
     pg_cursor = postgres_conn.cursor()
