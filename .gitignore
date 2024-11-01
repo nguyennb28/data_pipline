@@ -1,1 +1,4 @@
 for_test/
+__pycache__/
+*.pyc
+config.db
