@@ -1,6 +1,9 @@
 import sqlite3 as lite
 
 
+def connect_db():
+    return lite.connect('config.db')
+
 def insert_db_config(db_type, host, port, user, password, database):
     con = lite.connect('config.db')
     with con:
@@ -49,6 +52,37 @@ def retrieve_db_config_db_type(db_type):
         for row in rows:
             print(f"DB Type: {row[0]}, Host: {row[1]}, Port: {row[2]}, User: {
                   row[3]}, Password: {row[4]}, Database: {row[5]}")
+            
+def get_all_db_type():
+    con = lite.connect('config.db')
+    with con:
+        cur = con.cursor()
+        cur.execute("SELECT db_type FROM config_db")
+        rows = cur.fetchall()
+        db_types = []
+        for row in rows:
+            db_types.append(row[0])
+    con.close()
+    return db_types
+
+def get_db_config_by_db_type(db_type):
+    con = lite.connect('config.db')
+    with con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM config_db WHERE db_type=?", (db_type,))
+        rows = cur.fetchall()
+        db_configs = {}
+        for row in rows:
+            db_configs = {
+                'db_type': row[0],
+                'host': row[1],
+                'port': row[2],
+                'user': row[3],
+                'password': row[4],
+                'database': row[5]
+            }
+    con.close()
+    return db_configs
 
 # def main():
 #     retrieve_all_type_db_config()
