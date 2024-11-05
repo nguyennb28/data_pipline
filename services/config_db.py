@@ -2,10 +2,12 @@ import sqlite3 as lite
 
 
 def connect_db():
-    return lite.connect('config.db')
+    # return lite.connect('config.db')
+    return lite.connect('/home/coding/Workspace/data_pipline/config.db')
 
 def insert_db_config(db_type, host, port, user, password, database):
-    con = lite.connect('config.db')
+    # con = lite.connect('config.db')
+    con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     with con:
         cur = con.cursor()
         cur.execute("""
@@ -31,7 +33,8 @@ def insert_db_config(db_type, host, port, user, password, database):
 
 
 def retrieve_all_type_db_config():
-    con = lite.connect('config.db')
+    # con = lite.connect('config.db')
+    con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     print("Select Database Configuration")
     with con:
         cur = con.cursor()
@@ -43,7 +46,8 @@ def retrieve_all_type_db_config():
 
 
 def retrieve_db_config_db_type(db_type):
-    con = lite.connect('config.db')
+    # con = lite.connect('config.db')
+    con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     print(f"Select Database Configuration for {db_type}")
     with con:
         cur = con.cursor()
@@ -54,7 +58,8 @@ def retrieve_db_config_db_type(db_type):
                   row[3]}, Password: {row[4]}, Database: {row[5]}")
             
 def get_all_db_type():
-    con = lite.connect('config.db')
+    # con = lite.connect('config.db')
+    con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     with con:
         cur = con.cursor()
         cur.execute("SELECT db_type FROM config_db")
@@ -66,7 +71,8 @@ def get_all_db_type():
     return db_types
 
 def get_db_config_by_db_type(db_type):
-    con = lite.connect('config.db')
+    # con = lite.connect('config.db')
+    con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     with con:
         cur = con.cursor()
         cur.execute("SELECT * FROM config_db WHERE db_type=?", (db_type,))

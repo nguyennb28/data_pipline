@@ -42,6 +42,7 @@ def connect_db_by_info_db(info_db):
 # -----------------------
 # Check data if not exist -> insert data
 def update_data(mssql_conn, pg_conn, tables_sqlserver):
+    flag_update = False
     for table in tables_sqlserver:
         check_table = connect_db.table_exists_in_pg(pg_conn, table)
         if check_table is not True:
@@ -49,6 +50,7 @@ def update_data(mssql_conn, pg_conn, tables_sqlserver):
             sync_data.create_table_in_postgres(pg_conn, table, connect_db.get_table_structure(mssql_conn, table))
             # copy data
             sync_data.copy_data(mssql_conn, pg_conn, table)
+            flag_update = True
             print(f"Table {table} is created")
             print(f"Data from {table} is copied")
         else:            
@@ -57,7 +59,9 @@ def update_data(mssql_conn, pg_conn, tables_sqlserver):
             if (sync_data.check_new_records_in_sqlserver(mssql_conn, table, latest_record_id_pg)):
             #copy data
                 sync_data.copy_data_with_id(mssql_conn, pg_conn, table, latest_record_id_pg)
+                flag_update = True
                 print(f"Data from {table} is updated")
+    return flag_update
     
 # Setup schedule to sync data
 
@@ -94,7 +98,11 @@ def main():
     #             sync_data.copy_data_with_id(mssql_conn, pg_conn, table, latest_record_id_pg)
     #             print(f"Data from {table} is updated")
     
-    update_data(mssql_conn, pg_conn, tables_sqlserver)
+    status_update = update_data(mssql_conn, pg_conn, tables_sqlserver)
+    if status_update is not True:
+        print(f"Data is not updated")
+    else:
+        print(f"Data is updated")
 
 if __name__ == "__main__":
     main()
