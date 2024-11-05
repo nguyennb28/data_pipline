@@ -2,11 +2,11 @@ import sqlite3 as lite
 
 
 def connect_db():
-    # return lite.connect('config.db')
+    # Change your path: /home/your_username/../config.db
     return lite.connect('/home/coding/Workspace/data_pipline/config.db')
 
 def insert_db_config(db_type, host, port, user, password, database):
-    # con = lite.connect('config.db')
+    # Change your path: /home/your_username/../config.db
     con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     with con:
         cur = con.cursor()
@@ -33,7 +33,7 @@ def insert_db_config(db_type, host, port, user, password, database):
 
 
 def retrieve_all_type_db_config():
-    # con = lite.connect('config.db')
+    # Change your path: /home/your_username/../config.db
     con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     print("Select Database Configuration")
     with con:
@@ -46,7 +46,7 @@ def retrieve_all_type_db_config():
 
 
 def retrieve_db_config_db_type(db_type):
-    # con = lite.connect('config.db')
+    # Change your path: /home/your_username/../config.db
     con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     print(f"Select Database Configuration for {db_type}")
     with con:
@@ -58,7 +58,7 @@ def retrieve_db_config_db_type(db_type):
                   row[3]}, Password: {row[4]}, Database: {row[5]}")
             
 def get_all_db_type():
-    # con = lite.connect('config.db')
+    # Change your path: /home/your_username/../config.db
     con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     with con:
         cur = con.cursor()
@@ -71,7 +71,7 @@ def get_all_db_type():
     return db_types
 
 def get_db_config_by_db_type(db_type):
-    # con = lite.connect('config.db')
+    # Change your path: /home/your_username/../config.db
     con = lite.connect('/home/coding/Workspace/data_pipline/config.db')
     with con:
         cur = con.cursor()
@@ -89,17 +89,3 @@ def get_db_config_by_db_type(db_type):
             }
     con.close()
     return db_configs
-
-# def main():
-#     retrieve_all_type_db_config()
-#     while True:
-#         db_type = input("Enter the database type: ")
-#         print("\n" + "="*40 + "\n")
-#         retrieve_db_config_db_type(db_type)
-#         continue_input = input("Do you want to continue? (y/n): ").strip().lower()
-#         if continue_input != 'y':
-#             break
-#     print('Have a good day, goodbye!')
-
-# if __name__ == "__main__":
-#     main()
