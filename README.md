@@ -50,7 +50,7 @@ python /home/coding/Workspace/data_pipline/automate.py
 ```
 
 ## Scheduling with Cron
-To schedule the script to run every 10 minutes using cron, follow these steps:
+To schedule the script to run every 30 minutes using cron, follow these steps:
 
 1. Open the crontab editor:
    ```bash
@@ -59,7 +59,7 @@ To schedule the script to run every 10 minutes using cron, follow these steps:
 
 2. Add the following line to schedule the script:
    ```bash
-   */10 * * * * /home/coding/Workspace/data_pipline/run_automate.sh
+   */30 * * * * /home/coding/Workspace/data_pipline/run_automate.sh
    ```
 
 ### Example `run_automate.sh` Script
@@ -95,6 +95,3 @@ If you encounter issues when running the script with cron, consider the followin
 3. **Verify Paths**: Ensure that all paths in the script are absolute and correct.
 
 4. **Environment Variables**: Make sure all necessary environment variables are set in the script.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
