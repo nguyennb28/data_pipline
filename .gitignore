@@ -2,3 +2,4 @@ for_test/
 __pycache__/
 *.pyc
 config.db
+cron_log.txt
