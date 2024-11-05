@@ -62,3 +62,32 @@ def copy_data(sqlserver_conn, postgres_conn, table_name):
     postgres_conn.commit()
     sqlserver_cursor.close()
     pg_cursor.close()
+    
+def copy_data_with_id(sqlserver_conn, postgres_conn, table_name, latest_id_pg):
+    sqlserver_cursor = sqlserver_conn.cursor()
+    pg_cursor = postgres_conn.cursor()
+    
+    sqlserver_cursor.execute(f"SELECT * FROM {table_name} WHERE id > %s", (latest_id_pg,))
+    rows = sqlserver_cursor.fetchall()
+    
+    for row in rows:
+        placeholders = ','.join(['%s'] * len(row))
+        pg_cursor.execute(f"INSERT INTO {table_name} VALUES ({placeholders})", row)
+        
+    postgres_conn.commit()
+    sqlserver_cursor.close()
+    pg_cursor.close()
+    
+def get_latest_record_id_from_postgres(pg_conn, table_name):
+    pg_cursor = pg_conn.cursor()
+    pg_cursor.execute(f"SELECT MAX(id) FROM {table_name}")
+    record_id = pg_cursor.fetchone()[0]
+    pg_cursor.close()
+    return record_id
+
+def check_new_records_in_sqlserver(sqlserver_conn, table_name, latest_id_pg):
+    sqlserver_cursor = sqlserver_conn.cursor()
+    sqlserver_cursor.execute(f"SELECT COUNT(*) FROM {table_name} WHERE id > %s", (latest_id_pg,))
+    new_records_count = sqlserver_cursor.fetchone()[0]
+    sqlserver_cursor.close()
+    return new_records_count > 0
